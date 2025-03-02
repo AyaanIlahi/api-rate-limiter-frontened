@@ -22,31 +22,46 @@ export default function UnsplashPage() {
     setLoading(true);
     setError(null);
     const start = performance.now();
+    console.log(`searching: ${searchTerm}`)
     try {
-      const res = await fetch(`http://localhost:8000/imagesearch/${searchTerm}`);
-      console.log(res);
-      if (!res.ok) throw new Error("Failed to fetch images.");
-      const data = await res.json();
+      const response = await axios.get(`http://192.168.1.74:8000/imagesearch/${searchTerm}`, {
+          withCredentials: true,
+      });
+      console.log(response);
+      const data = response.data;
+      console.log(response);
+  
+      if (!data.results) throw new Error("Failed to fetch images.");
+      
       const end = performance.now();
-
       setImages(data.results);
       setLastApiDetails({
-        status: res.status,
-        responseTime: `${(end - start).toFixed(2)}ms`,
-        url: res.url,
+          status: response.status,
+          responseTime: `${(end - start).toFixed(2)}ms`,
+          url: response.config.url,
       });
-
+  
       setCallsMade((prev) => prev + 1);
       setRemainingCalls((prev) => Math.max(prev - 1, 0));
-    } catch (error) {
-      setImages([]);
-      setError("Unable to fetch images. Please try again later.");
-      setLastApiDetails({
-        status: "Error",
+  
+  } catch (error) {
+    console.error("❌ Axios Request Error:", error.response?.data || error.message);
+
+    // ✅ Correctly handle errors from backend middleware
+    if (error.response) {
+        setError(error.response.data.message); // Set the message from the backend
+    } else {
+        setError("Unable to fetch images. Please try again later.");
+    }
+
+    setLastApiDetails({
+        status: error.response?.status || "Error",
         responseTime: "N/A",
         url: "Invalid request",
-      });
-    } finally {
+    });
+
+    setImages([]);
+}finally {
       setLoading(false);
     }
   };
