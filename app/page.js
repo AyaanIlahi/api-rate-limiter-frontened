@@ -21,7 +21,6 @@ export default function HomePage() {
         throw new Error(data.message || "Failed to create token.");
       }
     } catch (error) {
-      console.error("❌ Token Creation Error:", error.message);
       setMessage(error.message || "Failed to create token. Try again.");
     }
   };
