@@ -8,8 +8,8 @@ export default function PokemonPage() {
   const [lastApiDetails, setLastApiDetails] = useState(null);
   const [trendingPokemon, setTrendingPokemon] = useState([]);
   const [callsMade, setCallsMade] = useState(0);
-  const [message, setMessage] = useState(""); // ✅ Error message state
-  const [loading, setLoading] = useState(false); // ✅ Added loading state
+  const [message, setMessage] = useState(""); //Error message state
+  const [loading, setLoading] = useState(false); //Added loading state
 
 
   useEffect(() => {
@@ -21,13 +21,13 @@ export default function PokemonPage() {
     if (!name) return;
     
     setMessage(""); // Reset error messages
-    setLoading(true); // ✅ Start loading
+    setLoading(true); //Start loading
     const start = performance.now();
 
     try {
       const res = await fetch(`http://192.168.1.74:8000/pokemon/${name.toLowerCase()}`, {
         method: "GET",
-        credentials: "include", // ✅ Includes cookies for authentication
+        credentials: "include", //Includes cookies for authentication
       });
       const end = performance.now();
       // Handle non-JSON errors (like 403 Forbidden)
@@ -50,7 +50,7 @@ export default function PokemonPage() {
       });
     } catch (error) {
       setPokemonData(null);
-      setMessage(error.message); // ✅ Display error messages correctly
+      setMessage(error.message); //Display error messages correctly
       setLastApiDetails({
         status: "Error",
         responseTime: "N/A",
@@ -58,7 +58,7 @@ export default function PokemonPage() {
       });
     }
     finally {
-      setLoading(false); // ✅ Stop loading after fetching
+      setLoading(false); //Stop loading after fetching
     }
   };
 
