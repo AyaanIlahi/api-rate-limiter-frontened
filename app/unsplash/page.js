@@ -73,7 +73,7 @@ export default function UnsplashPage() {
         {/* Search Bar */}
         <input
           type="text"
-          className="w-full p-3 border rounded-md text-gray-900"
+          className="w-full max-w-md p-3 border rounded-md text-gray-900"
           placeholder="Search Images..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
