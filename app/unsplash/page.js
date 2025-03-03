@@ -9,7 +9,6 @@ export default function UnsplashPage() {
   const [lastApiDetails, setLastApiDetails] = useState(null);
   const [trendingSearches, setTrendingSearches] = useState(["Nature", "Mountains", "Cars"]);
   const [callsMade, setCallsMade] = useState(0);
-  const [remainingCalls, setRemainingCalls] = useState(3); // Example limit
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -27,29 +26,19 @@ export default function UnsplashPage() {
       const response = await axios.get(`http://192.168.1.74:8000/imagesearch/${searchTerm}`, {
           withCredentials: true,
       });
-      console.log(response);
-      const data = response.data;
-      console.log(response);
-  
+      const data = response.data;  
       if (!data.results) throw new Error("Failed to fetch images.");
-      
       const end = performance.now();
+      setCallsMade((prev) => prev + 1);  
       setImages(data.results);
       setLastApiDetails({
           status: response.status,
           responseTime: `${(end - start).toFixed(2)}ms`,
           url: response.config.url,
       });
-  
-      setCallsMade((prev) => prev + 1);
-      setRemainingCalls((prev) => Math.max(prev - 1, 0));
-  
-  } catch (error) {
-    console.error("❌ Axios Request Error:", error.response?.data || error.message);
-
-    // ✅ Correctly handle errors from backend middleware
+    } catch (error) {
     if (error.response) {
-        setError(error.response.data.message); // Set the message from the backend
+        setError(error.response.data.message); 
     } else {
         setError("Unable to fetch images. Please try again later.");
     }
@@ -112,8 +101,7 @@ export default function UnsplashPage() {
       {/* Right Section (API Info) - Moves Below on Mobile */}
       <div className="w-full lg:w-1/4 p-4 mt-6 lg:mt-0 lg:ml-6 bg-white rounded-lg shadow-lg text-gray-900">
         <h3 className="text-lg font-bold">API Info</h3>
-        <p className="mt-2 font-semibold">Calls Made: {callsMade}</p>
-        <p className="font-semibold">Remaining Calls: {remainingCalls}</p>
+        <p className="mt-2 font-semibold">REQUESTS: {callsMade}/4</p>
 
         {/* Last API Call Details */}
         {lastApiDetails && (

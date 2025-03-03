@@ -8,7 +8,6 @@ export default function PokemonPage() {
   const [lastApiDetails, setLastApiDetails] = useState(null);
   const [trendingPokemon, setTrendingPokemon] = useState([]);
   const [callsMade, setCallsMade] = useState(0);
-  const [remainingCalls, setRemainingCalls] = useState(3); // Example limit
   const [message, setMessage] = useState(""); // ✅ Error message state
   const [loading, setLoading] = useState(false); // ✅ Added loading state
 
@@ -30,9 +29,7 @@ export default function PokemonPage() {
         method: "GET",
         credentials: "include", // ✅ Includes cookies for authentication
       });
-  
       const end = performance.now();
-      
       // Handle non-JSON errors (like 403 Forbidden)
       let data;
       try {
@@ -44,18 +41,14 @@ export default function PokemonPage() {
       if (!res.ok) {
         throw new Error(data.message || "Failed to fetch Pokémon.");
       }
-  
+      setCallsMade((prev) => prev + 1);
       setPokemonData(data);
       setLastApiDetails({
         status: res.status,
         responseTime: `${(end - start).toFixed(2)}ms`,
         url: res.url,
       });
-  
-      setCallsMade((prev) => prev + 1);
-      setRemainingCalls((prev) => Math.max(prev - 1, 0));
     } catch (error) {
-      console.error("❌ Fetch Error:", error.message);
       setPokemonData(null);
       setMessage(error.message); // ✅ Display error messages correctly
       setLastApiDetails({
@@ -136,9 +129,8 @@ export default function PokemonPage() {
       {/* Right Section (API Info) - Moves Below on Mobile */}
       <div className="w-full lg:w-1/4 p-4 mt-6 lg:mt-0 lg:ml-6 bg-white rounded-lg shadow-lg text-gray-900">
         <h3 className="text-lg font-bold">API Info</h3>
-        <p className="mt-2 font-semibold">Requests: {callsMade}/4</p>
-        <p className="font-semibold">Remaining Calls: {remainingCalls}</p>
-  
+        <p className="mt-2 font-semibold">REQUESTS: {callsMade}/4</p>
+
         {/* Last API Call Details */}
         {lastApiDetails && (
           <div className="mt-4 p-4 bg-gray-200 rounded-md text-gray-900">
