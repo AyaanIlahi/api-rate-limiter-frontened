@@ -13,7 +13,7 @@ export default function HomePage() {
       });
 
       const data = await res.json();
-      console.log("🔹 Server Response:", data);
+      console.log("Server Response:", data);
 
       if (res.ok) {
         setMessage(data.message);
