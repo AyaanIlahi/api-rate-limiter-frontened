@@ -20,7 +20,7 @@ const [message, setMessage] = useState("");
     >
       {/* Overlay for Dark Effect */}
       <div className="absolute inset-0 bg-black bg-opacity-60 z-0"></div>
-
+      
       <div className="z-10 flex flex-col items-center">
         <h1 className="text-4xl font-bold mb-6 text-white">API Rate Limiter 🚀</h1>
 
@@ -31,8 +31,8 @@ const [message, setMessage] = useState("");
 
         {/* API Selection Cards */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 mt-6">
-          <Card title="Pokémon API" description="Explore Pokémon Data" link="/pokemon" />
-          <Card title="Unsplash API" description="Browse High-Quality Images" link="/unsplash" />
+          <Card title="Pokémon API" description="5 Requests / Minute" link="/pokemon" />
+          <Card title="Unsplash API" description="5 Requests / Day" link="/unsplash" />
         </div>
       </div>
     </div>
