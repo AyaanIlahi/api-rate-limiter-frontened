@@ -4,6 +4,9 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
+import { Github } from "lucide-react";
+import { Linkedin } from 'lucide-react';
+
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,15 +44,20 @@ export default function Navbar() {
               whileHover={{ scale: 1.1 }}
               className="text-1xl font-bold text-white cursor-pointer"
             >
-              <Image src="/logo.png" alt="Logo" width={40} height={30} />
+              <Image src="/logo.webp" alt="Logo" width={44} height={40} />
             </motion.h1>
           </Link>
 
           {/* Desktop Navigation Links (Hidden on Mobile) */}
           {!isMobile && (
             <div className="flex space-x-6">
-              <Link href="/pokemon" className="text-gray-300 hover:text-white transition">Pokémon API</Link>
-              <Link href="/unsplash" className="text-gray-300 hover:text-white transition">Unsplash API</Link>
+              <Link href="/about" className="text-gray-100 hover:text-white transition"> About  </Link>
+              <a href="https://github.com/AyaanIlahi" target="_blank" rel="noopener noreferrer">
+              <Github className="w-6 h-6 text-gray-100 hover:text-white transition" />
+              </a>
+              <a href="https://linkedin.com/in/ayaan-elahi-777abc" target="_blank" rel="noopener noreferrer">
+              <Linkedin className="w-6 h-6 text-blue-500 hover:text-white transition" />
+              </a>
             </div>
           )}
         </div>
@@ -76,11 +84,22 @@ export default function Navbar() {
 
         <h2 className="text-xl font-bold mb-4">Navigation</h2>
         <nav className="flex flex-col space-y-3">
+          <Link href="/" className="hover:text-blue-400" onClick={closeSidebar}>Home</Link>
           <Link href="/pokemon" className="hover:text-blue-400" onClick={closeSidebar}>Pokémon API</Link>
           <Link href="/unsplash" className="hover:text-blue-400" onClick={closeSidebar}>Unsplash API</Link>
           <Link href="/analytics" className="hover:text-blue-400" onClick={closeSidebar}>Analytics</Link>
           <Link href="/documentation" className="hover:text-blue-400" onClick={closeSidebar}>Documentation</Link>
           <Link href="/about" className="hover:text-blue-400" onClick={closeSidebar}>About</Link>
+          <Link href="https://github.com/AyaanIlahi/api-rate-limiter-backened" target="_blank" className="hover:text-blue-400" onClick={closeSidebar}>Source Code Backened</Link>
+          <Link href="https://github.com/AyaanIlahi/api-rate-limiter-frontened" target="_blank" className="hover:text-blue-400" onClick={closeSidebar}>Source Code Frontened</Link>
+          <div className="flex space-x-6">
+              <a href="https://github.com/AyaanIlahi" target="_blank" rel="noopener noreferrer">
+              <Github className="w-6 h-6 text-gray-100 hover:text-white transition" />
+              </a>
+              <a href="https://linkedin.com/in/ayaan-elahi-777abc" target="_blank" rel="noopener noreferrer">
+              <Linkedin className="w-6 h-6 text-blue-500 hover:text-white transition" />
+              </a>
+            </div>
         </nav>
       </motion.div>
     </>

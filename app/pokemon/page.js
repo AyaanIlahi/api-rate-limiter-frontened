@@ -7,9 +7,8 @@ import SearchBar from "../components/SearchBar";
 export default function PokemonPage() {
   const [query, setQuery] = useState("");
   const [pokemonData, setPokemonData] = useState(null);
-  const [lastApiDetails, setLastApiDetails] = useState(null);
+  const [lastApiDetails, setLastApiDetails] = useState({totalRequests:0});
   const [trendingPokemon, setTrendingPokemon] = useState([]);
-  const [callsMade, setCallsMade] = useState(0);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -39,15 +38,17 @@ export default function PokemonPage() {
       }
 
       if (!res.ok) {
-        throw new Error(data.message || "Failed to fetch Pokémon.");
-      }
-
-      setCallsMade((prev) => prev + 1);
+        const errorMsg = data.message || "Failed to fetch Pokémon.";
+        const resetMsg = data.resetIn ? ` Try again after ${data.resetIn}.` : "";
+        throw new Error(errorMsg + resetMsg);
+    }
       setPokemonData(data);
       setLastApiDetails({
         status: res.status,
         responseTime: `${(end - start).toFixed(2)}ms`,
         url: res.url,
+        totalRequests: data.totalRequests
+        ,
       });
     } catch (error) {
       setPokemonData(null);
@@ -110,14 +111,14 @@ export default function PokemonPage() {
         whileHover={{ scale: 1.05 }}
       >
         <h3 className="text-lg font-bold">📡 API Info</h3>
-        <p className="mt-2 font-semibold">Requests: {callsMade}/4</p>
+        <p className="mt-2 font-semibold">Requests: {lastApiDetails.totalRequests} /5</p>
 
         {lastApiDetails && (
           <div className="mt-4 p-4 bg-white bg-opacity-20 rounded-md text-white shadow-md">
             <h3 className="text-lg font-bold">Last API Call</h3>
             <p>Status: <span className="font-semibold">{lastApiDetails.status}</span></p>
             <p>Response Time: <span className="font-semibold">{lastApiDetails.responseTime}</span></p>
-            <p>URL: <a href={lastApiDetails.url} className="text-blue-400 underline">{lastApiDetails.url}</a></p>
+            <p>URL: <a href={lastApiDetails.url} className="text-blue-400 underline break-all">{lastApiDetails.url}</a></p>
           </div>
         )}
       </motion.div>
