@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import SearchBar from "../components/SearchBar";
 
 export default function PokemonPage() {
   const [query, setQuery] = useState("");
@@ -8,39 +10,38 @@ export default function PokemonPage() {
   const [lastApiDetails, setLastApiDetails] = useState(null);
   const [trendingPokemon, setTrendingPokemon] = useState([]);
   const [callsMade, setCallsMade] = useState(0);
-  const [message, setMessage] = useState(""); //Error message state
-  const [loading, setLoading] = useState(false); //Added loading state
-
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Fetch trending Pokémon names from Redis (mocked for now)
     setTrendingPokemon(["Pikachu", "Charizard", "Bulbasaur"]);
   }, []);
 
   const fetchPokemon = async (name) => {
     if (!name) return;
-    
-    setMessage(""); // Reset error messages
-    setLoading(true); //Start loading
+
+    setMessage("");
+    setLoading(true);
     const start = performance.now();
 
     try {
       const res = await fetch(`http://192.168.1.74:8000/pokemon/${name.toLowerCase()}`, {
         method: "GET",
-        credentials: "include", //Includes cookies for authentication
+        credentials: "include",
       });
       const end = performance.now();
-      // Handle non-JSON errors (like 403 Forbidden)
+
       let data;
       try {
         data = await res.json();
       } catch (jsonError) {
         throw new Error("Unexpected server response.");
       }
-  
+
       if (!res.ok) {
         throw new Error(data.message || "Failed to fetch Pokémon.");
       }
+
       setCallsMade((prev) => prev + 1);
       setPokemonData(data);
       setLastApiDetails({
@@ -50,97 +51,76 @@ export default function PokemonPage() {
       });
     } catch (error) {
       setPokemonData(null);
-      setMessage(error.message); //Display error messages correctly
+      setMessage(error.message);
       setLastApiDetails({
         status: "Error",
         responseTime: "N/A",
         url: "Invalid request",
       });
-    }
-    finally {
-      setLoading(false); //Stop loading after fetching
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col lg:flex-row items-start min-h-screen p-6 bg-gray-100">
-      
-      {/* Left Section (Search + Pokémon Info) */}
-      <div className="flex-1 flex flex-col items-center w-full lg:w-3/4">
-        {/* Search Bar */}
-        <input
-          type="text"
-          className="w-full max-w-md p-3 border rounded-md text-gray-900"
-          placeholder="Search Pokémon..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          list="pokemon-suggestions"
+    <div
+      className="min-h-screen flex flex-col lg:flex-row bg-cover bg-center p-6 relative"
+      style={{ backgroundImage: "url('/backgroundPokemon.jpg')" }}
+    >
+      {/* Dark Overlay */}
+      <div className="absolute inset-0 bg-black bg-opacity-50 z-0"></div>
+
+      {/* Left Section */}
+      <div className="flex flex-col items-center w-full lg:w-3/4 relative z-10">
+        <SearchBar 
+          query={query} 
+          setQuery={setQuery} 
+          fetchResults={fetchPokemon} 
+          loading={loading} 
+          suggestions={trendingPokemon} 
         />
-        <datalist id="pokemon-suggestions">
-          {trendingPokemon.map((name, index) => (
-            <option key={index} value={name} />
-          ))}
-        </datalist>
-  
-        {/* Search Button */}
-        <button
-          onClick={() => fetchPokemon(query)}
-          className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          {loading ? "Loading..." : "Search"}
-        </button>
-  
-        {/* API Error Message */}
-        {message && <p className="mt-4 text-lg font-semibold text-red-600">{message}</p>}
-  
-        {/* Pokémon Data Display */}
+        
+        {message && <p className="mt-10 text-3xl font-bold text-yellow-400">{message}</p>}
+
         {pokemonData && (
-          <div className="w-full max-w-2xl mt-6 p-6 bg-white shadow-lg rounded-lg text-gray-900">
-            {/* Pokémon Image */}
-            <img
-              src={pokemonData.image}
-              alt={pokemonData.name}
-              className="mx-auto w-48 h-48"
-            />
-  
-            {/* Pokémon Type */}
+          <motion.div 
+            className="w-full max-w-2xl mt-6 p-6 bg-white bg-opacity-20 backdrop-blur-lg shadow-lg rounded-lg text-white"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4 }}
+          >
+            <h2 className="text-2xl font-bold">{pokemonData.name.toUpperCase()}</h2>
+            <img src={pokemonData.image} alt={pokemonData.name} className="mx-auto w-48 h-48" />
             <p className="mt-4 text-lg font-semibold">Type: {pokemonData.type.join(", ")}</p>
-  
-            {/* Scrollable Details Section */}
-            <div className="mt-4 p-4 bg-gray-200 rounded-md text-gray-900 max-h-64 overflow-y-auto">
-              <h2 className="text-2xl font-bold">{pokemonData.name.toUpperCase()}</h2>
-  
-              {/* Abilities Section */}
-              <div className="mt-4 text-left">
-                <h3 className="text-lg font-bold">Abilities:</h3>
-                <ul className="list-disc ml-5">
-                  {pokemonData.abilities.map((ability, index) => (
-                    <li key={index}>
-                      <span className="font-semibold">{ability.name}:</span> {ability.effect}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div className="mt-4 p-4 bg-white bg-opacity-20 rounded-md text-white max-h-64 overflow-y-auto">
+              <h3 className="text-lg font-bold mt-4">Abilities:</h3>
+              <ul className="list-disc ml-5">
+                {pokemonData.abilities.map((ability, index) => (
+                  <li key={index}><span className="font-bold">{ability.name}:</span> {ability.effect}</li>
+                ))}
+              </ul>
             </div>
-          </div>
+          </motion.div>
         )}
       </div>
-  
-      {/* Right Section (API Info) - Moves Below on Mobile */}
-      <div className="w-full lg:w-1/4 p-4 mt-6 lg:mt-0 lg:ml-6 bg-white rounded-lg shadow-lg text-gray-900">
-        <h3 className="text-lg font-bold">API Info</h3>
-        <p className="mt-2 font-semibold">REQUESTS: {callsMade}/4</p>
 
-        {/* Last API Call Details */}
+      {/* Right Section - API Info */}
+      <motion.div
+        className="w-full lg:w-1/4 p-6 mt-6 lg:mt-0 lg:ml-6 bg-white bg-opacity-10 backdrop-blur-lg rounded-lg shadow-lg text-white relative z-10"
+        whileHover={{ scale: 1.05 }}
+      >
+        <h3 className="text-lg font-bold">📡 API Info</h3>
+        <p className="mt-2 font-semibold">Requests: {callsMade}/4</p>
+
         {lastApiDetails && (
-          <div className="mt-4 p-4 bg-gray-200 rounded-md text-gray-900">
+          <div className="mt-4 p-4 bg-white bg-opacity-20 rounded-md text-white shadow-md">
             <h3 className="text-lg font-bold">Last API Call</h3>
             <p>Status: <span className="font-semibold">{lastApiDetails.status}</span></p>
             <p>Response Time: <span className="font-semibold">{lastApiDetails.responseTime}</span></p>
-            <p>URL: <a href={lastApiDetails.url} className="text-blue-600">{lastApiDetails.url}</a></p>
+            <p>URL: <a href={lastApiDetails.url} className="text-blue-400 underline">{lastApiDetails.url}</a></p>
           </div>
         )}
-      </div>
+      </motion.div>
     </div>
   );  
 }
