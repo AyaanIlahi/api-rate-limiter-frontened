@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import SearchBar from "../components/SearchBar";
+import axios from 'axios';
 
 export default function PokemonPage() {
   const [query, setQuery] = useState("");
@@ -13,46 +14,43 @@ export default function PokemonPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setTrendingPokemon(["Pikachu", "Charizard", "Bulbasaur"]);
+    setTrendingPokemon(["Pikachu", "Charizard", "Bulbasaur", "Squirtle", "Onix"]);
   }, []);
-
+  useEffect(() => {
+    const savedApiDetails = localStorage.getItem("pokeApiDetails");
+    if (savedApiDetails) {
+      setLastApiDetails(JSON.parse(savedApiDetails));
+    } 
+  }, []);
   const fetchPokemon = async (name) => {
     if (!name) return;
 
     setMessage("");
     setLoading(true);
     const start = performance.now();
-
     try {
-      const res = await fetch(`http://192.168.1.74:8000/pokemon/${name.toLowerCase()}`, {
-        method: "GET",
-        credentials: "include",
+      const res = await axios.get(`http://192.168.1.74:8000/pokemon/${name.toLowerCase()}`, {
+        withCredentials: true,
       });
       const end = performance.now();
-
-      let data;
-      try {
-        data = await res.json();
-      } catch (jsonError) {
-        throw new Error("Unexpected server response.");
-      }
-
-      if (!res.ok) {
-        const errorMsg = data.message || "Failed to fetch Pokémon.";
-        const resetMsg = data.resetIn ? ` Try again after ${data.resetIn}.` : "";
-        throw new Error(errorMsg + resetMsg);
-    }
-      setPokemonData(data);
-      setLastApiDetails({
+      const data = res.data;
+      const newApiDetails={
         status: res.status,
         responseTime: `${(end - start).toFixed(2)}ms`,
-        url: res.url,
-        totalRequests: data.totalRequests
-        ,
-      });
+        url: res.config.url,
+        totalRequests: data.totalRequests,
+      }
+      setPokemonData(data);
+      setLastApiDetails(newApiDetails);
+      localStorage.setItem("pokeApiDetails", JSON.stringify(newApiDetails));
     } catch (error) {
       setPokemonData(null);
-      setMessage(error.message);
+    
+      // Handle errors
+      const errorMsg = error.response?.data?.message || "Failed to fetch Pokémon.";
+      const resetMsg = error.response?.data?.resetIn ? ` Try again after ${error.response.data.resetIn}.` : "";
+      setMessage(errorMsg + resetMsg);
+    
       setLastApiDetails({
         status: "Error",
         responseTime: "N/A",
