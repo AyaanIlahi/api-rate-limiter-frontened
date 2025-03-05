@@ -1,6 +1,6 @@
 export const createToken = async (setMessage) => {
   try {
-    const res = await fetch("http://192.168.1.74:8000/createToken", {
+    const res = await fetch("https://api-rate-limiter-backened.onrender.com/createToken", {
       method: "GET",
       credentials: "include",
     });
