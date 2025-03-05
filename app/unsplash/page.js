@@ -14,7 +14,7 @@ export default function UnsplashPage() {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    setTrendingSearches(["Nature", "Mountains", "Cars", "Technology", "City"]);
+    setTrendingSearches(["Spiderman", "Marine Life", "Cars", "Logos", "Parrots",]);
   }, []);
   useEffect(() => {
     const savedApiDetails = localStorage.getItem("unsplApiDetails");
