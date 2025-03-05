@@ -22,7 +22,7 @@ const [message, setMessage] = useState("");
       <div className="absolute inset-0 bg-black bg-opacity-60 z-0"></div>
       
       <div className="z-10 flex flex-col items-center">
-        <h1 className="text-4xl font-bold mb-6 text-white">API Rate Limiter 🚀</h1>
+        <h1 className="text-4xl font-bold mb-6 text-white">API Rate Limiter 🖥️📱</h1>
 
         {/* Using Button Component */}
         <Button onClick={() => createToken(setMessage)}>Create Token</Button>
