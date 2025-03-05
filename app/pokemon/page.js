@@ -29,7 +29,7 @@ export default function PokemonPage() {
     setLoading(true);
     const start = performance.now();
     try {
-      const res = await axios.get(`http://192.168.1.74:8000/pokemon/${name.toLowerCase()}`, {
+      const res = await axios.get(`https://api-rate-limiter-backened.onrender.com/pokemon/${name.toLowerCase()}`, {
         withCredentials: true,
       });
       const end = performance.now();

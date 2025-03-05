@@ -35,7 +35,7 @@ export default function UnsplashPage() {
     const start = performance.now();
     console.log(`searching: ${searchTerm}`)
     try {
-      const response = await axios.get(`http://192.168.1.74:8000/imagesearch/${searchTerm}`, {
+      const response = await axios.get(`https://api-rate-limiter-backened.onrender.com/imagesearch/${searchTerm}`, {
           withCredentials: true,
       });
       const {data ,totalRequests} = response.data;  
