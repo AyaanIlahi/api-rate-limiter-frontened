@@ -46,7 +46,10 @@ export default function SearchBar({ query, setQuery, fetchResults, loading, sugg
 
         {/* Search Button */}
         <button
-          onClick={() => fetchResults(query)}
+          onClick={() => {
+            fetchResults(query);
+            setShowSuggestions(false); // Hide suggestions when clicked
+          }}
           disabled={!query || loading}
           className="w-12 flex items-center justify-center 
                     bg-gray-800 hover:bg-gray-900 transition text-white rounded-r-md disabled:opacity-50"
