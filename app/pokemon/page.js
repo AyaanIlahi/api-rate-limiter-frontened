@@ -34,7 +34,7 @@ export default function PokemonPage() {
       const newApiDetails={
         status: res.status,
         responseTime: `${(end - start).toFixed(2)}ms`,
-        url: res.config.url,
+        url: `https://api-rate-limiter-backened.onrender.com${res.config.url}`,
         totalRequests: data.totalRequests,
       }
       setPokemonData(data);
@@ -52,6 +52,7 @@ export default function PokemonPage() {
         status: "Error",
         responseTime: "N/A",
         url: "Invalid request",
+        totalRequests: lastApiDetails.totalRequests||0,
       });
     } finally {
       setLoading(false);
