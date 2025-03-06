@@ -1,6 +1,8 @@
 import api from "./utils/fetchWithAuth.js"; // Import the Axios instance
 
-export const createToken = async (setMessage) => {
+export const createToken = async (setMessage, setLoading) => {
+  setLoading(true); // Start loading
+
   try {
     const res = await api.get("/createToken");
 
@@ -12,5 +14,7 @@ export const createToken = async (setMessage) => {
     }
   } catch (error) {
     setMessage(error.response?.data?.message || "Failed to create token. Try again.");
+  } finally {
+    setLoading(false); // Stop loading
   }
 };

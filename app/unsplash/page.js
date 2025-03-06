@@ -43,7 +43,7 @@ export default function UnsplashPage() {
       const newApiDetails = {
         status: response.status,
         responseTime: `${(end - start).toFixed(2)}ms`,
-        url: response.config.url,
+        url: `https://api-rate-limiter-backened.onrender.com${response.config.url}`,
         totalRequests: totalRequests,
       };
       setImages(data.results);

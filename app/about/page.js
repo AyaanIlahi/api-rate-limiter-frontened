@@ -24,7 +24,7 @@ export default function About() {
         <FeatureCard
           icon={<Server size={30} />}
           title="Rate-Limiting Strategies"
-          description="Implements different strategies using Redis, including Fixed Window Counter."
+          description="Currently Implements different strategies using Redis, including Fixed Window Counter."
         />
         <FeatureCard
           icon={<CheckCircle size={30} />}
