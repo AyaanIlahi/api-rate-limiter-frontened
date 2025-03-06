@@ -1,8 +1,8 @@
 "use client";
 import { motion } from "framer-motion";
-import axios from 'axios';
 import { useState, useEffect,useRef } from "react";
 import SearchBar from "../components/SearchBar";
+import api from "../api/utils/fetchWithAuth.js";
 
 export default function UnsplashPage() {
   const [query, setQuery] = useState("");
@@ -35,9 +35,8 @@ export default function UnsplashPage() {
     const start = performance.now();
     console.log(`searching: ${searchTerm}`)
     try {
-      const response = await axios.get(`https://api-rate-limiter-backened.onrender.com/imagesearch/${searchTerm}`, {
-          withCredentials: true,
-      });
+      const response = await api.get(`/imagesearch/${searchTerm}`);
+
       const {data ,totalRequests} = response.data;  
       if (!data.results) throw new Error("Failed to fetch images.");
       const end = performance.now();
