@@ -1,9 +1,8 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import SearchBar from "../components/SearchBar";
-import axios from 'axios';
+import api from "../api/utils/fetchWithAuth.js"
 
 export default function PokemonPage() {
   const [query, setQuery] = useState("");
@@ -29,9 +28,7 @@ export default function PokemonPage() {
     setLoading(true);
     const start = performance.now();
     try {
-      const res = await axios.get(`https://api-rate-limiter-backened.onrender.com/pokemon/${name.toLowerCase()}`, {
-        withCredentials: true,
-      });
+      const res = await api.get(`/pokemon/${name.toLowerCase()}`);
       const end = performance.now();
       const data = res.data;
       const newApiDetails={
