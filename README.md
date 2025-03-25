@@ -3,11 +3,11 @@
 This repository contains the frontend for the **Scalable and Visually Appealing API Rate Limiter** project. The frontend provides a user-friendly interface to monitor and manage API rate limiting, visualize usage statistics, and configure rate-limiting rules.
 
 ## Live Demo: https://api-rate-limiter-frontened.vercel.app/
+## Backened Repository Link: https://github.com/AyaanIlahi/api-rate-limiter-backened
+
 
 ## Features
 - **Real-time Rate Limit Monitoring**: Displays API request limits, usage, and violations.
-- **Interactive Graphs & Charts**: Visual representation of API traffic and rate limit statistics.
-- **Configurable Rules**: Users can set and modify rate-limiting policies.
 - **JWT Token-Based Authentication**: Secure API access using JWT tokens.
 - **Responsive UI**: Works across different devices and screen sizes.
 
@@ -16,7 +16,7 @@ This repository contains the frontend for the **Scalable and Visually Appealing 
 - **UI Library**: Tailwind CSS
 - **State Management**: State Management: useState, useEffect (React Hooks)
 - **API Communication**: Axios / Fetch API
-- **Backend:** Built and Connected to an API hosted on Render.
+- **Backend:** Custom-built and hosted on Render, providing API services for this frontend.
 
 ## 📷 Screenshots
   ![homePage](https://github.com/user-attachments/assets/f229037f-eb26-4b95-a0ee-4bd985197c18)
